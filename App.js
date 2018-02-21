@@ -24,57 +24,40 @@ const instructions = Platform.select({
 type Props = {};
 
 export default class App extends Component<Props> {
-  onPressLearnMore() {
-    Alert.alert(
-      'Alert Title',
-      'My Alert Msg',
-      [
-        { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
-        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-        { text: 'OK', onPress: () => console.log('OK Pressed') },
-      ],
-      { cancelable: false }
-    )
-  }
-
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to Platzi Music!
-        </Text>
-        <Button
-          onPress={this.onPressLearnMore}
-          title="Learn More"
-          color="#841584"
-          accessibilityLabel="Learn more about this purple button"
-        />
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
+      <View style={styles.Container}>
+        <View style={[ styles.Box, styles.BoxRed ]}></View>
+        <View style={[ styles.Box, styles.BoxGreen ]}></View>
+        <View style={[ styles.Box, styles.BoxCyan ]}></View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  Container: {
     flex: 1,
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  Box: {
+    width: 100,
+    height: 100,
+    backgroundColor: 'black'
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  BoxRed: {
+    flex: 1,
+    backgroundColor: 'red'
+  },
+  BoxGreen: {
+    flex: 2,
+    alignSelf: 'flex-start',
+    backgroundColor: 'green'
+  },
+  BoxCyan: {
+    backgroundColor: 'cyan'
   },
 });
