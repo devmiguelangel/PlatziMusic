@@ -16,8 +16,8 @@ export default class ArtistBox extends Component {
 
     return (
       <View style={styles.artistBox}>
-        <Image style={styles.artistBoxImage} source={Images.logo} />
-        
+        <Image style={styles.artistBoxImage} source={{uri: image}} />
+
         <View style={styles.artistBoxInfo}>
           <Text style={styles.artistBoxName}>{name}</Text>
           <View style={styles.artistBoxRow}>
