@@ -11,8 +11,13 @@ import {
   View,
 } from 'react-native';
 
+import {
+  StackNavigator,
+} from 'react-navigation';
+
+import Login from './app/components/Login';
 import ArtistList from './app/components/ArtistList';
-import { getArtistList, getTopArtists } from './app/components/ApiClient'
+import ArtistDetail from './app/components/ArtistDetail';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -23,21 +28,45 @@ const instructions = Platform.select({
 
 type Props = {};
 
-export default class App extends Component<Props> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      artists: []
+const isAndroid = Platform.OS === 'android';
+
+const artistDetailNavigationOptions = {
+  title: 'Artist Detail'
+};
+
+if (isAndroid) {
+  artistDetailNavigationOptions.header = null;
+}
+
+const PlatziMusic = StackNavigator(
+  {
+    Login: {
+      screen: Login,
+      navigationOptions: {
+        header: null
+      }
+    },
+    ArtistList: {
+      screen: ArtistList,
+      navigationOptions: {
+        header: null
+      }
+    },
+    ArtistDetail: {
+      screen: ArtistDetail,
+      navigationOptions: artistDetailNavigationOptions
     }
+  },
+  {
+    initialRouteName: 'Login',
   }
+);
+
+export default class App extends Component<Props> {
   render() {
-    getTopArtists().then(data => this.setState({ artists: data }));
-
-    const artists = this.state.artists;
-
     return (
       <View style={styles.container}>
-        <ArtistList artists={artists} />
+        <PlatziMusic />
       </View>
     );
   }
