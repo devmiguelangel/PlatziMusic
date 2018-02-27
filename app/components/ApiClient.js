@@ -6,6 +6,7 @@ exports.getTopArtists = () => {
     .then((response) => response.json())
     .then((data) => data.artists.artist)
     .then((artists) => artists.map((artist, index) => ({
+      mbid: artist.mbid,
       key: index.toString(),
       name: artist.name,
       image: artist.image[3]['#text'],

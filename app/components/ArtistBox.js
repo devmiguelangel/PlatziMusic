@@ -3,16 +3,85 @@ import {
   StyleSheet,
   Text,
   View,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import Images from '@assets/images';
+import { firebaseDatabase, firebaseAuth } from './firebase';
+// import Images from '@assets/images';
 
 export default class ArtistBox extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      liked: false,
+      likeCount: 0
+    }
+  }
+
+  componentWillMount = () => {
+    const { uid } = firebaseAuth.currentUser;
+
+    this.getArtistRef().on('value', snapshot => {
+      const artist = snapshot.val();
+
+      if (artist) {
+        this.setState({
+          likeCount: artist.likeCount,
+          liked: artist.likes && artist.likes[uid]
+        });
+      }
+    });
+  }
+  
+
+  handleLike = () => {
+    this.setState({ liked: ! this.state.liked });
+
+    this.toggleLike();
+  }
+
+  getArtistRef = () => {
+    const { mbid } = this.props.artist;
+
+    return firebaseDatabase.ref(`artist/${mbid}`);
+  }
+
+  toggleLike = () => {
+    const { uid } = firebaseAuth.currentUser;
+
+    this.getArtistRef().transaction(function (artist) {
+      if (artist) {
+        if (artist.likes && artist.likes[uid]) {
+          artist.likeCount--;
+          artist.likes[uid] = null;
+        } else {
+          artist.likeCount++;
+          if (!artist.likes) {
+            artist.likes = {};
+          }
+          artist.likes[uid] = true;
+        }
+      }
+
+      return artist || {
+        likeCount: 1,
+        likes: {
+          [uid]: true
+        }
+      };
+    });
+  }
+
   render() {
-    const { image, name, likes, comments } = this.props.artist;
+    const { image, name, comments } = this.props.artist;
+    const { likeCount } = this.state;
+
+    const iconLike = this.state.liked ? 
+      <Icon name="ios-heart" size={30} color="#ff7675" /> : 
+      <Icon name="ios-heart-outline" size={30} color="gray" />;
 
     return (
       <View style={styles.artistBox}>
@@ -22,8 +91,10 @@ export default class ArtistBox extends Component {
           <Text style={styles.artistBoxName}>{name}</Text>
           <View style={styles.artistBoxRow}>
             <View style={styles.artistBoxIcon}>
-              <Icon name="ios-heart-outline" size={30} color="gray" />
-              <Text style={styles.artistBoxIconCount}>{likes}</Text>
+              <TouchableOpacity activeOpacity={0.3} onPress={() => this.handleLike() }>
+                {iconLike}
+              </TouchableOpacity>
+              <Text style={styles.artistBoxIconCount}>{likeCount}</Text>
             </View>
             <View style={styles.artistBoxIcon}>
               <Icon name="ios-text-outline" size={30} color="gray" />
