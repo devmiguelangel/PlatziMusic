@@ -10,7 +10,6 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import { firebaseDatabase, firebaseAuth } from './firebase';
-// import Images from '@assets/images';
 
 export default class ArtistBox extends Component {
   constructor(props) {

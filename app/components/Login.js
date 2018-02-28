@@ -10,12 +10,16 @@ import {
   StyleSheet,
   View,
   Text,
+  Image,
+  ImageBackground
 } from 'react-native';
 
 import FBSDK, {
   LoginButton,
   AccessToken
 } from 'react-native-fbsdk';
+
+import Images from '@assets/images';
 
 import firebase, { firebaseAuth } from "./firebase";
 
@@ -81,10 +85,11 @@ export default class Login extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <ImageBackground source={Images.background} style={styles.container}>
         <Text style={styles.welcome}>
           Bienvenidos a PlatziMusic
         </Text>
+        <Image source={Images.logo} style={styles.logo} />
         {/*
         <Text style={styles.welcome}>
           {this.state.user && this.state.user.displayName}
@@ -95,7 +100,7 @@ export default class Login extends Component {
           readPermissions={["public_profile", "email"]}
           onLoginFinished={this.handleLogin}
           onLogoutFinished={() => alert("logout.")} />
-      </View>
+      </ImageBackground>
     );
   }
 }
@@ -103,6 +108,8 @@ export default class Login extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: null,
+    height: null,
     // flexDirection: 'column',
     // justifyContent: 'center',
     // alignItems: 'center',
@@ -113,6 +120,12 @@ const styles = StyleSheet.create({
   welcome: {
     fontSize: 24,
     fontWeight: '600',
-    marginBottom: 50
+    marginBottom: 15,
+    color: '#dfe4ea'
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    marginBottom: 20
   }
 });

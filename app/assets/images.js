@@ -1,5 +1,6 @@
 const images = {
-  davidBowieImage: require('./img/david-bowie-01.jpg')
+  background: require('./img/background.jpg'),
+  logo: require('./img/logo.png'),
 };
 
 export default images;
