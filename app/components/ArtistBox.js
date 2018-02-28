@@ -17,7 +17,8 @@ export default class ArtistBox extends Component {
     super(props);
     this.state = {
       liked: false,
-      likeCount: 0
+      likeCount: 0,
+      commentCount: 0,
     }
   }
 
@@ -36,10 +37,21 @@ export default class ArtistBox extends Component {
     });
   }
   
+  componentDidMount = () => {
+    this.getNumberComments();
+  }  
+
+  getNumberComments = () => {
+    const { mbid } = this.props.artist;
+    const commentsRef = firebaseDatabase.ref(`comments/${mbid}`);
+
+    commentsRef.once('value', snapshot => {
+      this.setState({ commentCount: snapshot.numChildren() });
+    });
+  }
 
   handleLike = () => {
-    this.setState({ liked: ! this.state.liked });
-
+    // this.setState({ liked: ! this.state.liked });
     this.toggleLike();
   }
 
@@ -76,8 +88,8 @@ export default class ArtistBox extends Component {
   }
 
   render() {
-    const { image, name, comments } = this.props.artist;
-    const { likeCount } = this.state;
+    const { image, name } = this.props.artist;
+    const { likeCount, commentCount } = this.state;
 
     const iconLike = this.state.liked ? 
       <Icon name="ios-heart" size={30} color="#ff7675" /> : 
@@ -98,7 +110,7 @@ export default class ArtistBox extends Component {
             </View>
             <View style={styles.artistBoxIcon}>
               <Icon name="ios-text-outline" size={30} color="gray" />
-              <Text style={styles.artistBoxIconCount}>{comments}</Text>
+              <Text style={styles.artistBoxIconCount}>{commentCount}</Text>
             </View>
           </View>
         </View>
